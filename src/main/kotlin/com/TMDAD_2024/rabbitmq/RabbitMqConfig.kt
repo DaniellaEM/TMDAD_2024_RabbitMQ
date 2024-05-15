@@ -27,4 +27,9 @@ class RabbitMqConfig {
             .to(exchange())
             .with("MESSAGE_ROUTING_KEY")
     }
+    @Bean
+    fun newQueue(): Queue {
+        return Queue("SECOND_MESSAGE_QUEUE")
+    }
+
 }

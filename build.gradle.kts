@@ -34,6 +34,7 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation("org.apache.opennlp:opennlp-tools:1.9.3")
 }
 
 tasks.withType<KotlinCompile> {
