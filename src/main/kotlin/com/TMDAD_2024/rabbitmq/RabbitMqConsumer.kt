@@ -3,11 +3,14 @@ package com.TMDAD_2024.rabbitmq
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
 import java.io.File
 import java.util.*
 
 data class MyMessage(val list: List<String>)
 
+@EnableScheduling
 @Service
 class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
 
@@ -51,11 +54,13 @@ class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
             println("$word: $count")
         }
 
-        // Formar un mensaje único con las palabras clave
-        val trendingTopicsMessage = currentTrends.joinToString(separator = ", ")
+        // Formar un mensaje único con las palabras clave ordenado
+        val trendingTopicsMessage = currentTrends.mapIndexed { index, pair ->
+            "${index + 1}.º ${pair.first}: ${pair.second}"
+        }.joinToString(separator = ", ")
 
 
-        // Send the received message to the new queue
+        // Enviar los trending topics a la nueva cola
         rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
     }
 
@@ -70,12 +75,13 @@ class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
 
         return wordCounts.toList().sortedByDescending { it.second }.map { it.first }
     }
-}
-@Service
-class SecondQueueConsumer {
 
-    @RabbitListener(queues = ["SECOND_MESSAGE_QUEUE"])
-    fun consume(message: String) {
-        println("Received message from SECOND_MESSAGE_QUEUE -> $message")
+    // Resetear a la lista de trending topics todos los dias a la media noche
+    @Scheduled(cron = "0 0 0 * * ?")
+    fun resetTrends() {
+        println("Resetting trending topics")
+        synchronized(trendMap) {
+            trendMap.clear()
+        }
     }
 }
