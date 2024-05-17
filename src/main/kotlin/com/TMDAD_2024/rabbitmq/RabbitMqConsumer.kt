@@ -8,8 +8,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 data class MyMessage(val list: List<String>)
 
 @Service
-class RabbitMqConsumer(private val messagingTemplate: SimpMessagingTemplate,
-                       private val rabbitTemplate: RabbitTemplate) {companion object {private val trendMap = mutableMapOf<String, Int>()}
+//class RabbitMqConsumer(private val messagingTemplate: SimpMessagingTemplate,
+//                       private val rabbitTemplate: RabbitTemplate) {companion object {private val trendMap = mutableMapOf<String, Int>()}
+class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {companion object {private val trendMap = mutableMapOf<String, Int>()}
 
     @RabbitListener(queues = ["MESSAGE_QUEUE"])
     fun consume(message: String) {
@@ -37,10 +38,10 @@ class RabbitMqConsumer(private val messagingTemplate: SimpMessagingTemplate,
         }
 
         // Formar un mensaje único con las palabras clave
-        val trendingTopicsMessage = currentTrends.joinToString(separator = ", ") { it.first }
+        val trendingTopicsMessage = currentTrends.joinToString(separator = ", ")
 
         // Send the received message down the WebSocket
-        messagingTemplate.convertAndSend("/topic/trendings", trendingTopicsMessage)
+//        messagingTemplate.convertAndSend("/topic/trendings", trendingTopicsMessage)
 
         // Send the received message to the new queue
         rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
@@ -58,11 +59,11 @@ class RabbitMqConsumer(private val messagingTemplate: SimpMessagingTemplate,
         return wordCounts.toList().sortedByDescending { it.second }.map { it.first }
     }
 }
-@Service
-class SecondQueueConsumer {
-
-    @RabbitListener(queues = ["SECOND_MESSAGE_QUEUE"])
-    fun consume(message: String) {
-        println("Received message from SECOND_MESSAGE_QUEUE -> $message")
-    }
-}
+//@Service
+//class SecondQueueConsumer {
+//
+//    @RabbitListener(queues = ["SECOND_MESSAGE_QUEUE"])
+//    fun consume(message: String) {
+//        println("Received message from SECOND_MESSAGE_QUEUE -> $message")
+//    }
+//}
