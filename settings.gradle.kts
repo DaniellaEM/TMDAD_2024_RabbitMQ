@@ -1,1 +1,1 @@
-rootProject.name = "TMDAD_2024"
+rootProject.name = "TMDAD_2024_RabbitMQ"

@@ -1,4 +1,4 @@
-package com.TMDAD_2024.rabbitmq
+package com.TMDAD_2024_RabbitMQ.rabbitmq
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

@@ -1,4 +1,4 @@
-package com.TMDAD_2024.rabbitmq
+package com.TMDAD_2024_RabbitMQ.rabbitmq
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.core.RabbitTemplate
