@@ -13,14 +13,11 @@ data class MyMessage(val list: List<String>)
 
 @EnableScheduling
 @Service
-class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/) {
+class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
 
     companion object {
         private val trendMap = mutableMapOf<String, Int>()
         private val stopwords = mutableSetOf<String>()
-
-        @Autowired
-        private lateinit var rabbitTemplate: RabbitTemplate
 
         init {
             // Cargar stopwords desde el archivo txt
@@ -42,7 +39,7 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
         }
 
         @Synchronized
-        fun sendToRabbit() {
+        fun sendToRabbit(rabbitTemplate: RabbitTemplate) {
             if(trendMap.isEmpty())
             {
                 println("Todavia sin datos")
@@ -109,7 +106,7 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
 //
 //        // Enviar los trending topics a la nueva cola
 //        rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
-        sendToRabbit()
+        sendToRabbit(rabbitTemplate)
     }
 
     fun send(m: String)
