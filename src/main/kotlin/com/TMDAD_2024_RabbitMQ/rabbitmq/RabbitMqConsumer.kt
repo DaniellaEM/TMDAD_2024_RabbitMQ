@@ -43,6 +43,12 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
 
         @Synchronized
         fun sendToRabbit() {
+            if(trendMap.isEmpty())
+            {
+                rabbitTemplate?.convertAndSend("SECOND_MESSAGE_QUEUE", "Todavia sin datos, envia mensajes!")
+                return
+            }
+
             // Obtener las tendencias actuales
             val currentTrends = trendMap.toList().sortedByDescending { it.second }
 
