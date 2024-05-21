@@ -20,7 +20,7 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
         private val stopwords = mutableSetOf<String>()
 
         @Autowired
-        private val rabbitTemplate: RabbitTemplate? = null
+        private lateinit var rabbitTemplate: RabbitTemplate
 
         init {
             // Cargar stopwords desde el archivo txt
@@ -45,7 +45,8 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
         fun sendToRabbit() {
             if(trendMap.isEmpty())
             {
-                rabbitTemplate?.convertAndSend("SECOND_MESSAGE_QUEUE", "Todavia sin datos, envia mensajes!")
+                println("Todavia sin datos")
+                rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", "Todavia sin datos, envia mensajes!")
                 return
             }
 
@@ -64,7 +65,7 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
             }.joinToString(separator = ", ")
 
             // Enviar los trending topics a la nueva cola
-            rabbitTemplate?.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
+            rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
         }
 
         @Synchronized
@@ -109,6 +110,11 @@ class RabbitMqConsumer(/*@Autowired private val rabbitTemplate: RabbitTemplate*/
 //        // Enviar los trending topics a la nueva cola
 //        rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
         sendToRabbit()
+    }
+
+    fun send(m: String)
+    {
+
     }
 
     private fun processText(text: String): List<String> {
