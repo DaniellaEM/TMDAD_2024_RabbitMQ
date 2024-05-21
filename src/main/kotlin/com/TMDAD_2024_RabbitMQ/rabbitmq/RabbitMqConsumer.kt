@@ -109,11 +109,6 @@ class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
         sendToRabbit(rabbitTemplate)
     }
 
-    fun send(m: String)
-    {
-
-    }
-
     private fun processText(text: String): List<String> {
         // Filtrar palabras permitidas y eliminar signos de puntuación
         val filteredWords = text.split(Regex("\\s+"))
