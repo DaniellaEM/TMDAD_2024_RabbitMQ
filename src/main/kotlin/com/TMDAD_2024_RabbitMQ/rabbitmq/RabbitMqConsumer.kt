@@ -43,7 +43,7 @@ class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
             if(trendMap.isEmpty())
             {
                 println("Todavia sin datos")
-                rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", "Todavia sin datos, envia mensajes!")
+                rabbitTemplate.convertAndSend("TRENDING_QUEUE", "Todavia sin datos, envia mensajes!")
                 return
             }
 
@@ -62,7 +62,7 @@ class RabbitMqConsumer(private val rabbitTemplate: RabbitTemplate) {
             }.joinToString(separator = ", ")
 
             // Enviar los trending topics a la nueva cola
-            rabbitTemplate.convertAndSend("SECOND_MESSAGE_QUEUE", trendingTopicsMessage)
+            rabbitTemplate.convertAndSend("TRENDING_QUEUE", trendingTopicsMessage)
         }
 
         @Synchronized

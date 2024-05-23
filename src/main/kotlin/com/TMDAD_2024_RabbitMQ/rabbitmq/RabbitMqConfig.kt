@@ -30,7 +30,7 @@ class RabbitMqConfig {
     }
     @Bean
     fun newQueue(): Queue {
-        return Queue("SECOND_MESSAGE_QUEUE")
+        return Queue("TRENDING_QUEUE")
     }
 
     @Bean
