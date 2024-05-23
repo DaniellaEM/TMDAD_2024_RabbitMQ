@@ -16,18 +16,19 @@ class RabbitMqConfig {
         return Queue("MESSAGE_QUEUE")
     }
 
-    @Bean
-    fun exchange(): TopicExchange {
-        return TopicExchange("MESSAGE_EXCHANGE")
-    }
+//    @Bean
+//    fun exchange(): TopicExchange {
+//        return TopicExchange("MESSAGE_EXCHANGE")
+//    }
+//
+//    @Bean
+//    fun binding(): Binding {
+//        return BindingBuilder
+//            .bind(queue())
+//            .to(exchange())
+//            .with("MESSAGE_ROUTING_KEY")
+//    }
 
-    @Bean
-    fun binding(): Binding {
-        return BindingBuilder
-            .bind(queue())
-            .to(exchange())
-            .with("MESSAGE_ROUTING_KEY")
-    }
     @Bean
     fun newQueue(): Queue {
         return Queue("TRENDING_QUEUE")
